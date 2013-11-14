@@ -10,6 +10,8 @@
   "author": "",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "express": "~3.4.4"
+    "express": "3.4.4",
+    "basic-log": "0.1.2",
+    "engine.io": "~0.7.12"
   }
 }
