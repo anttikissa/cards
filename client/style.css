@@ -1,8 +1,9 @@
 body {
 	font-family: sans-serif;
 	font-weight: lighter;
-	font-size: 16px;
-	line-height: 20px;
+	font-size: 14px;
+	line-height: 18px;
+	background: #f8f8f8;
 }
 
 * {
@@ -11,9 +12,10 @@ body {
 }
 
 .card {
-	position: relative;
-	width: 280px;
-	min-height: 120px;
+	background: #fdfdfd;
+	position: absolute;
+	width: 16em;
+	min-height: 10em;
 	border: 1px solid #aaa;
 	top: 20px;
 	left: 20px;

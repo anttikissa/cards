@@ -4,7 +4,9 @@ var _ = require('lodash');
 
 var app = express();
 
+_.templateSettings.interpolate = /\$(\w+)/g
 var cardTemplate = _.template(fs.readFileSync(__dirname + '/card.html'));
+console.log(_.templateSettings.interpolate);
 
 app.use(express.static(__dirname + '/client'));
 app.get('/', function(req, res) {
@@ -12,9 +14,17 @@ app.get('/', function(req, res) {
 		'content-type': 'text/html'
 	});
 	res.write("<link rel=stylesheet href=style.css>\n");
-	res.end(cardTemplate({
-		style: '{ top: 100px; left: 200px; }'
-	}));
+	function card(x, y) {
+		res.write(cardTemplate({
+			style: 'top: ' + y + 'px; left: ' + x + 'px;'
+		}));
+	}
+	card(100, 100);
+	card(360, 100);
+	card(620, 100);
+	card(620, 136);
+	card(880, 100);
+	res.end();
 })
 
 app.listen(8000);
