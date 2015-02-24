@@ -1,4 +1,4 @@
 #!/bin/sh
 
-node server.js
+node --harmony server.js
 

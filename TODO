@@ -1,6 +1,9 @@
 DONE Make it data-driven
 DONE Use Koa
-TODO Add POST handler for cards
+DONE Add PUT handler for cards
+TODO Save difference whenever cards are updated ('set title to "Foo"' etc)
+TODO Add POST handler for cards (creating more)
+TODO Add DELETE handler for cards (deleting)
 TODO Front-end: add editing of cards
 TODO Front-end: add moving of cards
 TODO what else?

@@ -27,6 +27,21 @@ var db = {
 					data && resolve(set(JSON.parse(data), 'id', id));
 				});
 			});
+		},
+		
+		save: function(card) {
+			return new Promise(function(resolve, reject) {
+				var id = card.id;
+				if (!card.id) {
+					return reject(new Error('no id'));
+				}
+				var file = 'data/cards/' + id + '.json';
+				fs.writeFile(file, JSON.stringify(card, null, 2), 'utf8',
+						function(err, data) {
+					err && reject(err);
+					!err && resolve();
+				});
+			});
 		}
 	}
 }

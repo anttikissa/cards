@@ -16,7 +16,7 @@ var cardTemplate = _.template(fs.readFileSync(__dirname + '/card.html'));
 
 app.use(static(__dirname + '/client'));
 
-app.use(route.get('/', function* () {
+app.use(route.get('/', function*() {
 	var table = yield db.tables.find(1);
 	
 	var cards = yield Promise.all(table.cards.map(function(id) {
@@ -37,6 +37,25 @@ app.use(route.get('/', function* () {
 	}
 
 	cards.forEach(render);
+}));
+
+app.use(bodyParser());
+
+app.use(route.get('/card/:id', function*(id) {
+	this.body = JSON.stringify(yield db.cards.find(id), null, 2);
+}));
+
+app.use(route.put('/card/:id', function*(id) {
+	var card = this.request.body;
+
+	if (typeof card !== 'object') {
+		this.throw('no body', 400);
+	}
+
+	card.id = id;
+	yield db.cards.save(card);
+	
+	this.body = 'ok';
 }));
 
 var port = 8000;

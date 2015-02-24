@@ -1,6 +1,7 @@
 {
-	"title": "Hello!",
-	"content": "This is a second card.\nYou can write stuff on me.",
-	"x": 360,
-	"y": 100
+  "title": "Moikka moi",
+  "content": "This is the second card.\nYou can write stuff on me.",
+  "x": 400,
+  "y": 200,
+  "id": "2"
 }
