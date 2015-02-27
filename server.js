@@ -25,6 +25,7 @@ app.use(route.get('/', function*() {
 
 	this.body = "<link rel=stylesheet href=style.css>\n";
 	this.body += "<script src='jquery-2.1.1.js'></script>\n";
+	this.body += "<script src='fetch.js'></script>\n";
 	this.body += "<script src='client.js'></script>\n";
 	var that = this;
 
