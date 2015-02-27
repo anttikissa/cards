@@ -29,6 +29,12 @@ body {
 	font-weight: 600;
 }
 
-.card p {
+.card .content {
 	cursor: pointer;
 }
+
+.card .content:focus {
+	outline: 1px solid #4ff;
+	background: #cff;
+}
+
