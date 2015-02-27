@@ -4,7 +4,7 @@ var log = console.log.bind(console);
 function textify($el) {
 	return $el.find('p').map(function() {
 		return this.innerHTML;
-	}).get().join('\n');
+	}).get().join('\n').trim();
 }
 
 $(function() {
@@ -22,6 +22,17 @@ $(function() {
 			var id = $card.data('id');
 
 			log('PATCH id', id, 'with text', text);
+			window.fetch('/card/2', {
+				method: 'PATCH',
+				body: JSON.stringify({ 'content': text })
+			}).then(function() {
+				log('fetch ok');
+
+			}).catch(function(err) {
+				log('fetch fail', err);
+				// TODO do whatever
+				alert(err.message);
+			});
 		}
 	});
 });
