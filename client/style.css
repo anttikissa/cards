@@ -28,3 +28,7 @@ body {
 	font-size: 1em;
 	font-weight: 600;
 }
+
+.card p {
+	cursor: pointer;
+}
