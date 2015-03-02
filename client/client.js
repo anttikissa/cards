@@ -13,6 +13,32 @@ $(function() {
 		$content.data('textWhenFocused', textify($content));
 	});
 
+	var mousedown = false;
+	var $dragTarget = null;
+
+	$('body').on('mousedown', '.card', function(e) {
+		log('mousedown on card');
+		$dragTarget = $(e.target);
+		$dragTarget.addClass('beingDragged');
+
+		mousedown = true;
+	});
+
+	$('body').on('mousemove', function(e) {
+		if (!mousedown) {
+			return;
+		}
+
+		log('mousemove', e);
+	});
+
+	$('body').on('mouseup', function(e) {
+		mousedown = false;
+		log('mouseup', e);
+		$dragTarget && $dragTarget.removeClass('beingDragged');
+		$dragTarget = null;
+	});
+
 	$('body').on('blur', '.content', function(e) {
 		var $content = $(e.target);
 		var text = textify($content);
