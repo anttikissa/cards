@@ -22,17 +22,28 @@ $(function() {
 			var id = $card.data('id');
 
 			log('PATCH id', id, 'with text', text);
-			window.fetch('/card/2', {
-				method: 'PATCH',
-				body: JSON.stringify({ 'content': text })
-			}).then(function() {
-				log('fetch ok');
 
-			}).catch(function(err) {
-				log('fetch fail', err);
-				// TODO do whatever
+			cardUrl = '/card/' + id;
+			cardPatchData = { 'content': text };
+
+			// TODO window.fetch with PATCH doesn't work exactly,
+			// find out why
+//			window.fetch('/card/' + id, {
+//				method: 'PATCH',
+//				body: JSON.stringify({ 'content': text })
+//			})
+
+			$.ajax(cardUrl, {
+				type: 'PATCH',
+				data: cardPatchData
+			})
+			.then(function() {
+				log('PATCH ok');
+			}).fail(function(err) {
+				log('PATCH fail', err);
 				alert(err.message);
 			});
+
 		}
 	});
 });

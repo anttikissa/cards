@@ -55,9 +55,28 @@ app.use(route.put('/card/:id', function*(id) {
 		this.throw('no body', 400);
 	}
 
+	// TODO sanity check for contents of 'card'
+
 	card.id = id;
+
 	yield db.cards.save(card);
 	
+	this.body = 'ok';
+}));
+
+app.use(route.patch('/card/:id', function*(id) {
+	var patch = this.request.body;
+	if (typeof patch !== 'object') {
+		this.throw('no body', 400);
+	}
+	// TODO sanity check for contents of 'patch'
+
+	var card = yield db.cards.find(id);
+
+	var newCard = _.extend({}, card, patch);
+
+	yield db.cards.save(newCard);
+
 	this.body = 'ok';
 }));
 
