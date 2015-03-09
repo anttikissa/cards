@@ -8,38 +8,93 @@ function textify($el) {
 }
 
 $(function() {
-	$('body').on('click', '.card .content', function(e) {
+	var $body = $('body');
+
+	$body.on('click', '.card .content', function(e) {
 		var $content = $(e.target).closest('.content');
 		$content.data('textWhenFocused', textify($content));
 	});
 
-	var mousedown = false;
+	var dragging = false;
 	var $dragTarget = null;
+	var dragX = null;
+	var dragY = null;
+	var origOffset = null;
 
-	$('body').on('mousedown', '.card', function(e) {
-		log('mousedown on card');
-		$dragTarget = $(e.target);
-		$dragTarget.addClass('beingDragged');
+	function saveCard(id, changed) {
+			cardUrl = '/card/' + id;
+			$.ajax(cardUrl, {
+				type: 'PATCH',
+				data: changed
+			})
+			.then(function() {
+				log('Card saved. (PATCH ok)');
+			}).fail(function(err) {
+				log('PATCH fail', err);
+				alert(err.message);
+			});
+	}
 
-		mousedown = true;
+	$body.on('mousedown', '.card .drag-handle', function(e) {
+		$dragTarget = $(e.target).closest('.card');
+		$dragTarget.addClass('being-dragged');
+		$dragTarget.find('.content').attr('contenteditable', false);
+
+		$body.addClass('dragging');
+
+		dragX = e.clientX;
+		dragY = e.clientY;
+		origOffset = $dragTarget.offset();
+
+		dragging = true;
 	});
 
-	$('body').on('mousemove', function(e) {
-		if (!mousedown) {
+	$body.on('click', '.card .drag-handle', function(e) {
+		e.preventDefault();
+	});
+
+	$body.on('mousemove', function(e) {
+		if (!dragging) {
 			return;
 		}
 
-		log('mousemove', e);
+		var deltaX = e.clientX - dragX;
+		var deltaY = e.clientY - dragY;
+
+		var newTop = origOffset.top + deltaY;
+		var newLeft = origOffset.left + deltaX;
+
+		// TODO maybe use translate2d
+		$dragTarget.css('top', newTop + 'px');
+		$dragTarget.css('left', newLeft + 'px');
 	});
 
-	$('body').on('mouseup', function(e) {
-		mousedown = false;
-		log('mouseup', e);
-		$dragTarget && $dragTarget.removeClass('beingDragged');
-		$dragTarget = null;
+	$body.on('mouseup', function(e) {
+		dragging = false;
+		var finalDeltaX = e.clientX - dragX;
+		var finalDeltaY = e.clientY - dragY;
+
+		if ($dragTarget) {
+
+			var finalPosX = parseInt($dragTarget.css('left'));
+			var finalPosY = parseInt($dragTarget.css('top'));
+
+			var id = $dragTarget.data('id');
+
+			saveCard(id, {
+				x: finalPosX,
+				y: finalPosY
+			});
+
+			$dragTarget.removeClass('being-dragged');
+			$dragTarget.find('.content').attr('contenteditable', true);
+			$dragTarget = null;
+		}
+
+		$body.removeClass('dragging');
 	});
 
-	$('body').on('blur', '.content', function(e) {
+	$body.on('blur', '.content', function(e) {
 		var $content = $(e.target);
 		var text = textify($content);
 		var oldText = $content.data('textWhenFocused');
@@ -49,9 +104,6 @@ $(function() {
 
 			log('PATCH id', id, 'with text', text);
 
-			cardUrl = '/card/' + id;
-			cardPatchData = { 'content': text };
-
 			// TODO window.fetch with PATCH doesn't work exactly,
 			// find out why
 //			window.fetch('/card/' + id, {
@@ -59,17 +111,7 @@ $(function() {
 //				body: JSON.stringify({ 'content': text })
 //			})
 
-			$.ajax(cardUrl, {
-				type: 'PATCH',
-				data: cardPatchData
-			})
-			.then(function() {
-				log('PATCH ok');
-			}).fail(function(err) {
-				log('PATCH fail', err);
-				alert(err.message);
-			});
-
+			saveCard(id, { 'content': text });
 		}
 	});
 });

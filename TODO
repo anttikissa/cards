@@ -1,10 +1,10 @@
-TODO Add dragging of cards
 TODO Add POST handler for cards (adding new cards)
 TODO Add DELETE handler for cards (deleting)
 TODO Front-end: add editing of cards
 TODO Front-end: add moving of cards
 TODO what else?
 
+DONE Add dragging of cards
 DONE Make it data-driven
 DONE Use Koa
 DONE Add PUT handler for cards
